@@ -1,0 +1,8 @@
+source https://nuget.org/api/v2
+
+nuget TwitchLib
+nuget Owin
+nuget Microsoft.AspNet.WebApi
+nuget Microsoft.AspNet.WebApi.OwinSelfHost
+nuget Newtonsoft.Json
+nuget SimpleInjector

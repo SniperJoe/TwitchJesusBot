@@ -1,0 +1,45 @@
+# general output directories
+bin/
+build/
+compile/
+coverage/
+obj/
+packages/
+coverage/
+logs/
+*.log
+
+# local config files
+settings.config
+
+# VisualStudio user files
+*.dbmdl
+*.publish.xml
+*.user
+*.suo
+*.webinfo
+*.vs/
+
+# VisualStudio tools files
+StyleCop.Cache
+StyleCopViolations.xml
+
+# WebStorm user file
+*.idea
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# git
+*.orig
+
+#NuGet
+.nuget/
+
+#paket
+/paket-files/
+paket.local
+/.bbgit/*
+.paket/Paket.Restore.targets
+paket-files
