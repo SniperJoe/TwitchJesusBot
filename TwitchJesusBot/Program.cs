@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Owin.Hosting;
+using TwitchJesusBot.Interfaces;
 
 namespace TwitchJesusBot
 {
@@ -15,20 +16,19 @@ namespace TwitchJesusBot
         [STAThread]
         static void Main()
         {
-            string baseAddress = "http://localhost:27003/";
-            _startedApp = WebApp.Start<Startup>(url: baseAddress);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(_mainForm = new Form1());
+            using (WebApp.Start<Startup>(url: "http://localhost:27003/"))
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(_mainForm = new Form1());
+            };
         }
 
-        public static void UpdateAuthToken(string authToken, string refreshToken, int tokenTTL)
+        public static void UpdateAuthToken(ICredentials credentials)
         {
-            _mainForm.Init(authToken, refreshToken, tokenTTL);
+            _mainForm.Init(credentials);
         }
 
-        private static IDisposable _startedApp;
         private static Form1 _mainForm;
-
     }
 }

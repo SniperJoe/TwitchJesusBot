@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandsHandler.cs" />
-    <Compile Include="CommandsStorage.cs" />
+    <Compile Include="Credentials.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +139,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommandsStorage\TwitchJesusBot.CommandsStorage.csproj">
+      <Project>{332260e0-da2f-48e9-8eaa-57c413623c57}</Project>
+      <Name>TwitchJesusBot.CommandsStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TwitchJesusBot.Interfaces\TwitchJesusBot.Interfaces.csproj">
+      <Project>{fc173be8-96d7-4208-b8c1-c60d1ee324b5}</Project>
+      <Name>TwitchJesusBot.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TwitchJesusBot.Models\TwitchJesusBot.Models.csproj">
+      <Project>{BE98E56C-8F46-4C5B-8993-FCD7A56238A0}</Project>
+      <Name>TwitchJesusBot.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

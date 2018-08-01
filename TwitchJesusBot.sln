@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchJesusBot", "TwitchJesusBot\TwitchJesusBot.csproj", "{8A3D9820-D24F-4451-B8DC-9B7D836710D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchJesusBot.CommandsStorage", "CommandsStorage\TwitchJesusBot.CommandsStorage.csproj", "{332260E0-DA2F-48E9-8EAA-57C413623C57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchJesusBot.Interfaces", "TwitchJesusBot.Interfaces\TwitchJesusBot.Interfaces.csproj", "{FC173BE8-96D7-4208-B8C1-C60D1EE324B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchJesusBot.Models", "TwitchJesusBot.Models\TwitchJesusBot.Models.csproj", "{BE98E56C-8F46-4C5B-8993-FCD7A56238A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +21,23 @@ Global
 		{8A3D9820-D24F-4451-B8DC-9B7D836710D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A3D9820-D24F-4451-B8DC-9B7D836710D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A3D9820-D24F-4451-B8DC-9B7D836710D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{332260E0-DA2F-48E9-8EAA-57C413623C57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{332260E0-DA2F-48E9-8EAA-57C413623C57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{332260E0-DA2F-48E9-8EAA-57C413623C57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{332260E0-DA2F-48E9-8EAA-57C413623C57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC173BE8-96D7-4208-B8C1-C60D1EE324B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC173BE8-96D7-4208-B8C1-C60D1EE324B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC173BE8-96D7-4208-B8C1-C60D1EE324B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC173BE8-96D7-4208-B8C1-C60D1EE324B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE98E56C-8F46-4C5B-8993-FCD7A56238A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE98E56C-8F46-4C5B-8993-FCD7A56238A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE98E56C-8F46-4C5B-8993-FCD7A56238A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE98E56C-8F46-4C5B-8993-FCD7A56238A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7849D8F1-5C7E-4811-BAAF-6783C4F20300}
 	EndGlobalSection
 EndGlobal

@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using SimpleInjector;
+using System;
 using System.Configuration;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
-using TwitchLib.Client;
-using TwitchLib.Client.Events;
-using TwitchLib.Client.Models;
+using TwitchJesusBot.Interfaces;
+using TwitchJesusBot.CommandsStorage;
 
 namespace TwitchJesusBot
 {
@@ -21,11 +12,20 @@ namespace TwitchJesusBot
         public Form1()
         {
             InitializeComponent();
+            _container = new Container();
+
         }
 
-        public void Init(string authToken, string refreshToken, int tokenTTL)
+        public void Init(ICredentials credentials)
         {
-            _commandsHandler = new CommandsHandler(authToken, refreshToken, tokenTTL);
+            _container.RegisterInstance(credentials);
+            _container.Register<ICommandsStorage, CommandsGetter>(Lifestyle.Singleton);
+            var clientsFactoryRegistration = Lifestyle.Singleton.CreateRegistration<TwitchClientFactory>(_container);
+            _container.AddRegistration<IClientFactory>(clientsFactoryRegistration);
+            _container.AddRegistration<ITokenUpdateHandler>(clientsFactoryRegistration);
+            _container.Register<ICommandsHandler, CommandsHandler>(Lifestyle.Singleton);
+            _container.Register<TwitchTokenUpdater>(Lifestyle.Singleton);
+            _container.Verify(VerificationOption.VerifyAndDiagnose);
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
@@ -35,14 +35,16 @@ namespace TwitchJesusBot
                 string message = "";
                 for (int i = 1; i <= s; i++)
                     message += "nukeDog ";
-                _commandsHandler.SendMessages(message, ConfigurationManager.AppSettings.Get("default_channel"));
+            var commandsHandler = _container.GetInstance<ICommandsHandler>();
+                commandsHandler.SendMessages(new[] { message }, ConfigurationManager.AppSettings.Get("default_channel"));
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _commandsHandler.SendMessages("guit00 guit1 guit2", ConfigurationManager.AppSettings.Get("default_channel"));
+            var commandsHandler = _container.GetInstance<ICommandsHandler>();
+            commandsHandler.SendMessages(new[] { "guit00 guit1 guit2" }, ConfigurationManager.AppSettings.Get("default_channel"));
         }
 
-        private CommandsHandler _commandsHandler;
+        private Container _container;
     }
 }

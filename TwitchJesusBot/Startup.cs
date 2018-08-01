@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using SimpleInjector;
 
 namespace TwitchJesusBot
 {
@@ -15,12 +16,7 @@ namespace TwitchJesusBot
         {
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
-            config.Routes.MapHttpRoute(
-                name: "Auth",
-                routeTemplate: "{controller}/",
-                defaults: new { controller = "Auth", access_token="dsfgfdsg"}
-            );
-
+            config.MapHttpAttributeRoutes();
             appBuilder.UseWebApi(config);
             RedirectUser();
         }

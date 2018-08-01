@@ -5,23 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwitchLib.Client;
+using TwitchJesusBot.CommandsStorage;
+using TwitchJesusBot.Interfaces;
+using TwitchJesusBot.Models;
 
 namespace TwitchJesusBot
 {
-    class CommandsHandler
+    class CommandsHandler : ICommandsHandler
     {
-        public CommandsHandler(string token, string tokenRefresh, int tokenTTL)
+        public CommandsHandler(ICommandsStorage commandsStorage, IClientFactory clientFactory)
         {
-            this._commandsStorage = new CommandsStorage();
+            this._commandsStorage = commandsStorage;
             this._commands = _commandsStorage.GetCommands();
-            this._events = _commandsStorage.GetEventReactions();
-            this._clientFactory = new TwitchClientFactory(token, tokenRefresh, tokenTTL);
+            this._clientFactory = clientFactory;
             InitPrimaryClient();
         }
 
         private async void InitPrimaryClient()
         {
-            this._primaryClient = (await _clientFactory.GetClientsAsync(1))[0];
+            this._primaryClient = (await _clientFactory.GetClients(1))[0];
             var channels = ConfigurationManager.AppSettings.Get("channels");
             if (channels != null)
             {
@@ -33,12 +35,13 @@ namespace TwitchJesusBot
             }
             this._primaryClient.OnMessageReceived += (sender, args) =>
             {
-                if (_commands.ContainsKey(args.ChatMessage.Message))
+                var commandAndReactions = _commands.FirstOrDefault(c => c.Key == args.ChatMessage.Message);
+                if (commandAndReactions != null)
                 {
-                    SendMessages(_commands[args.ChatMessage.Message], args.ChatMessage.Channel);
+                    SendMessages(commandAndReactions.Reactions, args.ChatMessage.Channel);
                 }
             };
-            foreach (var channelEventsPair in _events)
+            /*foreach (var channelEventsPair in _events)
             {
                 foreach (var eventReactionPair in channelEventsPair.Value)
                 {
@@ -47,20 +50,19 @@ namespace TwitchJesusBot
                         (o, args) => { _primaryClient.SendMessage(channelEventsPair.Key, eventReactionPair.Value); }, 
                         eventReactionPair.Key);
                 }
-            }
+            }*/
         }
 
-        public async void SendMessages(string messages, string channel)
+        public async void SendMessages(string[] messagesList, string channel)
         {
-            var messagesList = messages.Split(';');
-            var clients = await _clientFactory.GetClientsAsync(messagesList.Length);
+            var clients = await _clientFactory.GetClients(messagesList.Length);
             for (int i = 0; i < messagesList.Length; i++)
             {
                 await clients[i].JoinChannelAsync(channel);
             }
             for (int  i = 0; i< messagesList.Length; i++)
             {
-                clients[i].SendMessage(channel, messagesList[i]);
+                await clients[i].SendMessageAsync(channel, messagesList[i]);
             }
         }
 
@@ -73,10 +75,9 @@ namespace TwitchJesusBot
             }
         }
 
-        private CommandsStorage _commandsStorage;
-        private Dictionary<string, string> _commands;
-        private Dictionary<string, Dictionary<string, string>> _events;
-        private readonly TwitchClientFactory _clientFactory;
+        private ICommandsStorage _commandsStorage;
+        private IEnumerable<Command> _commands;
+        private readonly IClientFactory _clientFactory;
         private TwitchClient _primaryClient;
     }
 }

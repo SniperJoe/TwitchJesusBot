@@ -1,23 +1,20 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
-using Newtonsoft.Json.Linq;
-using TwitchLib.Client.Models;
+using TwitchJesusBot.Interfaces;
 
 namespace TwitchJesusBot
 {
     class TwitchTokenUpdater
     {
-        public TwitchTokenUpdater(string refreshToken, int updateFrequency, Action<string> applyNewToken)
+        public TwitchTokenUpdater(ICredentials credentials, ITokenUpdateHandler tokenUpdateHandler)
         {
-            _refreshToken = refreshToken;
-            _newTokenApplier = applyNewToken;
-            _timer = new Timer {Interval = 100000};
+            _refreshToken = credentials.RefreshToken;
+            _newTokenApplier = tokenUpdateHandler;
+            _timer = new Timer {Interval = credentials.TokenTTL};
             _timer.Elapsed += UpdateTokenAsync;
             _timer.Enabled = true;
             _timer.Start();
@@ -44,12 +41,12 @@ namespace TwitchJesusBot
             if (newRefreshToken != null && accessToken != null)
             {
                 _refreshToken = newRefreshToken;
-                _newTokenApplier(accessToken);
+                _newTokenApplier.UpdateToken(accessToken);
             }
         }
 
         private string _refreshToken;
         private readonly Timer _timer;
-        private readonly Action<string> _newTokenApplier;
+        private readonly ITokenUpdateHandler _newTokenApplier;
     }
 }

@@ -4,18 +4,18 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwitchJesusBot.Interfaces;
 using TwitchLib.Client;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 
 namespace TwitchJesusBot
 {
-    class TwitchClientFactory
+    class TwitchClientFactory : ITokenUpdateHandler, IClientFactory
     {
-        public TwitchClientFactory(string startupToken, string refreshToken, int updateFrequency)
+        public TwitchClientFactory(ICredentials credentials)
         {
-            this._token = startupToken;
-            this._tokenUpdater = new TwitchTokenUpdater(refreshToken, updateFrequency, UpdateToken);
+            this._token = credentials.StartupToken;
             this._readyClients = new List<TwitchClient>();
         }
 
@@ -32,7 +32,7 @@ namespace TwitchJesusBot
             return client;
         }
 
-        public async Task<List<TwitchClient>> GetClientsAsync(int clientCount)
+        public async Task<List<TwitchClient>> GetClients(int clientCount)
         {
             while (clientCount > _readyClients.Count)
             {

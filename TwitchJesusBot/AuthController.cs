@@ -13,6 +13,7 @@ namespace TwitchJesusBot
 {
     public class AuthController : ApiController
     {
+        [Route("auth"), HttpGet]
         public async Task<string> Get([FromUri]string code)
         {
             HttpClient client = new HttpClient();
@@ -35,7 +36,13 @@ namespace TwitchJesusBot
             var accessToken = authResponseObject["access_token"]?.ToString();
             if (refreshToken != null && accessToken!=null && Int32.TryParse(authResponseObject["expires_in"]?.ToString(), out int tokenTTL))
             {
-                Program.UpdateAuthToken(accessToken, refreshToken, tokenTTL);
+                var credentials = new Credentials
+                {
+                    StartupToken = accessToken,
+                    RefreshToken = refreshToken,
+                    TokenTTL = tokenTTL
+                };
+                Program.UpdateAuthToken(credentials);
                 return "success";
             }
             return "fail";

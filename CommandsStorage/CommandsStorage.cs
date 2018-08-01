@@ -4,22 +4,34 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwitchJesusBot.Interfaces;
+using TwitchJesusBot.Models;
 
-namespace TwitchJesusBot
+namespace TwitchJesusBot.CommandsStorage
 {
-    class CommandsStorage
+    public class CommandsGetter : ICommandsStorage
     {
-        public Dictionary<string, string> GetCommands()
+        public IEnumerable<Command> GetCommands()
         {
             var commandsFilePath = ConfigurationManager.AppSettings.Get("CommandsFile");
-            var commands = new Dictionary<string, string>();
+            //return GetCommandsFromDB();
+            return GetCommandsFromFile(commandsFilePath);
+        }
+
+        private IEnumerable<Command> GetCommandsFromFile(string commandsFilePath)
+        {
+            var commands = new List<Command>();
             if (commandsFilePath != null)
             {
                 var commandsLines = System.IO.File.ReadAllLines(commandsFilePath);
                 foreach (var line in commandsLines)
                 {
                     var commandAndReaction = line.Split(',');
-                    commands[commandAndReaction[0]] = commandAndReaction[1];
+                    commands.Add(new Command
+                    {
+                        Key = commandAndReaction[0],
+                        Reactions = commandAndReaction[1].Split(';')
+                    });
                 }
             }
             return commands;
@@ -39,6 +51,22 @@ namespace TwitchJesusBot
                 }
             }
             return events;
+        }
+
+        public void SaveCommandsFromFile(string fileName)
+        {
+            var commands = GetCommandsFromFile(fileName);
+            SaveCommandsToDB(commands);
+        }
+
+        private void SaveCommandsToDB(IEnumerable<Command> commands)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<Command> GetCommandsFromDB()
+        {
+            throw new NotImplementedException();
         }
     }
 }

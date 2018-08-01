@@ -73,5 +73,24 @@ namespace TwitchJesusBot
                     ;
             });
         }
+
+        public static async Task SendMessageAsync(this TwitchClient client, string channel, string message)
+        {
+            await Task.Run(() =>
+            {
+                var sent = false;
+                var sentHandler = new EventHandler<OnMessageSentArgs>((sender, args) => {
+                    if (args.SentMessage.Channel == channel)
+                    {
+                        sent = true;
+                    }
+                });
+                client.OnMessageSent += sentHandler;
+                client.SendMessage(channel, message);
+                while (!sent)
+                    ;
+                client.OnMessageSent -= sentHandler;
+            });
+        }
     }
 }
