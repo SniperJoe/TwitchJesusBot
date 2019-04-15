@@ -9,6 +9,8 @@ using TwitchLib.Client.Models;
 
 namespace TwitchJesusBot
 {
+    //это не мое мне подкинули
+    //На самом деле мое, спасибо разработчикам TwitchClient и отсутствию нативных асинхронных методов за эти костыли
     public static class TwitchClientExtensions 
     {
         public static async Task ConnectAsync(this TwitchClient client)
